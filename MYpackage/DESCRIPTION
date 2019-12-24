@@ -1,0 +1,16 @@
+Package: MYpackage
+Title: What the Package Does (One Line, Title Case)
+Version: 1.0.0.000
+Authors@R:
+    person(given = "Martino",
+           family = "Ischia",
+           role = c("aut", "cre"),
+           email = "ischiamartino@gmail.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: What license it uses
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
+Imports: 
+    dplyr
