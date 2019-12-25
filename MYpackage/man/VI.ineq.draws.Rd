@@ -4,7 +4,7 @@
 \alias{VI.ineq.draws}
 \title{VI bound using Jensen inequality}
 \usage{
-VI.ineq.draws(PYclust)
+VI.ineq.draws(PYclust, parti = PYclust, print.bar = TRUE)
 }
 \description{
 Computes a bound for expected VI loss and the partition minimizing it

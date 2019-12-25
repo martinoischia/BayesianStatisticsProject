@@ -16,21 +16,12 @@ require(ggpubr)
 
 set.seed(42)
 data_toy <- c(rnorm(5, -2, 1), rnorm(10, 2, 1))
-	# data.frame(x = seq(-5, 5, by = 0.1), 
-           # y = 0.33 * dnorm(seq(-5, 5, by = 0.1), -2, 1) + 
-             # 0.67 * dnorm(seq(-5, 5, by = 0.1), 2, 1)) %>%
-  # ggplot() + 
-  # theme_minimal() + 
-  # geom_line(aes(x = x, y = y)) + 
-  # geom_point(data.frame(x = data_toy, col = as.factor(c(rep(1, 5), rep(2, 10)))), 
-             # mapping =  aes(x = x, y = 0, col = col)) +
-  # theme(legend.position = "none")
 
 ##### MCMC sampling for a DP mixture model
 
 model <- PYdensity(data_toy, 
                        mcmc = list(niter = 15000, nburn = 5000, 
-                                   method = "SLI", model = "LS", hyper = F)) #output=list( out_type= "mean", mean_dens=TRUE))
+                                   method = "SLI", model = "LS", hyper = F)) 
 								   
 								   
 summary(model)
@@ -38,14 +29,18 @@ ENOC(1, length(data_toy))
 
 ## Plot of the estimated density and its bayesian credible intervals
 
-plot_model <- plot(model, show_points = T, show_hist = T, show_clust = T)
-x11()
-ggarrange(plot_model)
-
-	##plot to be fixed
-	# lines(x = seq(-5, 5, by = 0.1), 
-	# y = 0.33 * dnorm(seq(-5, 5, by = 0.1), -2, 1) + 
-	# 0.67 * dnorm(seq(-5, 5, by = 0.1), 2, 1), col= 'red')
+data.frame(x = seq(-5, 5, by = 0.1), 
+           y = 0.33 * dnorm(seq(-5, 5, by = 0.1), -2, 1) + 
+               0.67 * dnorm(seq(-5, 5, by = 0.1), 2, 1)) %>%
+ggplot()+
+theme_minimal() + 
+geom_line(aes(x = x, y = y,col = "True density")) + 
+geom_line(data = data.frame(xx=model$grideval,yy=colMeans(model$density)), aes(x=xx, y=yy, col="Estimated density"))+
+scale_color_manual(name = "Group",
+values = c( "True density" = "blue", "Estimated density" = "red"),
+labels = c("True density", "Estimated density"))+
+geom_point(data.frame(x = data_toy), 
+           mapping =  aes(x = x, y = 0) )
 
 ## Coda diagnostic ( raw )
 
@@ -61,8 +56,7 @@ effectiveSize(coda_model)
 Binder = B.loss.draws(model$clust)
 Binder$min
 # Binder$exp.loss	
-# Partitions found by eploiting different hierarchical
-# clusterings
+# Partitions found by eploiting different hierarchical clusterings
 Hier(model)$average.Binder   
 Hier(model)$complete.Binder
 Hier(model)$average.PSM
@@ -72,7 +66,7 @@ Hier(model)$complete.eu
 
 ## Partition in the Markov chain minimizing the Variation of Information Loss
 
-VI = VI.loss.draws(model$clust)
+#VI = VI.loss.draws(model$clust)
 VI.ineq = VI.ineq.draws(model$clust)
 VI$min
 VI.ineq$min
@@ -82,7 +76,7 @@ partitions.counter(model$clust)[1:5,]
 
 
 greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI") 
-
+greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI",Jensen=FALSE) 
 greedy (model$clust,l=	100*ncol(model$clust), maxiter= 20,distance="Binder")
 
 # in this case all the estimates give the same result
@@ -90,3 +84,12 @@ greedy (model$clust,l=	100*ncol(model$clust), maxiter= 20,distance="Binder")
 # in another partition, but in the paper was suggested to put 2
 
 
+
+##### this is for the developing 
+# library(devtools)
+# setwd("./MYpackage")
+# document()
+# setwd("..")
+# install("MYpackage")
+# 3
+# reload("MYpackage")

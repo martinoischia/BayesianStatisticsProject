@@ -118,7 +118,7 @@ return(list(average.Binder = min.a, BI.average = d_absa, complete.Binder = min.c
 #' Computes expected VI loss and the partition minimizing it
 #' @export
 VI.loss.draws= function (PYclust, parti=PYclust, print.bar = TRUE) {
-if(print.bar) {pb <- txtProgressBar(0, nrow(PYclust), style = 3)}
+if(print.bar) {pb <- txtProgressBar(0, nrow(parti), style = 3)}
 VI <- vector(length = nrow(parti))
 n = ncol(PYclust)
 	# sim.mat = array(dim = c(nrow(PYclust),n,n))
@@ -144,9 +144,9 @@ return(list(exp.loss = VI,min = parti[which.min(VI),]))
 #'
 #' Computes a bound for expected VI loss and the partition minimizing it
 #' @export
-VI.ineq.draws = function (PYclust) {
-pb <- txtProgressBar(0, nrow(PYclust), style = 3)
-VI <- vector(length = nrow(PYclust))
+VI.ineq.draws = function (PYclust, parti=PYclust, print.bar = TRUE) {
+if(print.bar){pb <- txtProgressBar(0, nrow(parti), style = 3)}
+VI <- vector(length = nrow(parti))
 n = ncol(PYclust)
 # Compute PSM
 PSM <- matrix( ncol = n, nrow = n)
@@ -157,13 +157,13 @@ for(j in 1:n){
   }
 }
 
-for(i in 1:nrow(PYclust)){
-SM = sapply(PYclust[i,], function(x) x == PYclust[i,])
+for(i in 1:nrow(parti)){
+SM = sapply(parti[i,], function(x) x == parti[i,])
 VI[i] = sum( log2(colSums(SM))) - 2*sum(log2(colSums(PSM*SM)))
-setTxtProgressBar(pb, i)
+if(print.bar){setTxtProgressBar(pb, i)}
 }
-close(pb)
-return(list(VI = VI,min = PYclust[which.min(VI),]))
+if(print.bar){close(pb)}
+return(list(exp.loss = VI,min = parti[which.min(VI),]))
 }
 
 #' Binder distance for two partitions
@@ -238,6 +238,7 @@ return(out)
 #' N closest partitions
 #'
 #' Finds the n closest partitions covering or being covered wrt a given one under B/VI losses
+#' @export
 n.closest.partition = function(partition, n = 10, distance="VI" ){
 if (distance!="Binder"&&distance!="VI"){stop("put a valid distance")}
 if (distance == "Binder"){myfun = Binder.distance}
@@ -251,7 +252,7 @@ if(length(counts2)>0){
 for(i in 1: length(counts2)){
 cluster = as.numeric(names(counts2[i]))
 index= which(partition==cluster)
-for(j in 1:counts2[i]){
+for(j in 1:round(counts2[i]/2)){
 comb  = combn(index,j)
 for(k in 1:ncol(comb)){
 partition2 = partition
@@ -266,7 +267,7 @@ if(length(unique(partition) )>1){
 comb = combn(unique(partition),2)
 for(i in 1:ncol(comb)){
 partition2 = partition
-partition2[partition2==comb[2,i]]= comb[1,i]
+partition2[partition==comb[2,i]]= comb[1,i]
 out = rbind(out,partition2,deparse.level = 0)}
 }
 #Calculating selected distance for the partitions found
@@ -283,11 +284,12 @@ return(out[order(dis)[1:min(n,nrow(out))],])
 #' Computes the partition with the least expected loss through a greedy algorithm
 #' @export
 
-greedy = function (PYclust, partition = PYclust[1,], l= 2*ncol(PYclust), maxiter=1000, distance="VI") {
+greedy = function (PYclust, partition = PYclust[1,], l= 2*ncol(PYclust), maxiter=1000, distance="VI", Jensen=TRUE) {
 
 if (distance!="Binder"&&distance!="VI"){stop("put a valid distance")}
 if (distance=="VI"){loss.draws=VI.loss.draws}
-else{loss.draws= B.loss.draws} 
+if (Jensen){loss.draws=VI.ineq.draws}
+if (distance=="Binder"){loss.draws= B.loss.draws} 
 pb <- txtProgressBar(0, maxiter, style = 3)
 n = ncol(PYclust)
 current.loss =  loss.draws(PYclust,t(as.matrix(partition)),FALSE)$exp.loss 

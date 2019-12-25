@@ -9,7 +9,8 @@ greedy(
   partition = PYclust[1, ],
   l = 2 * ncol(PYclust),
   maxiter = 1000,
-  distance = "VI"
+  distance = "VI",
+  Jensen = TRUE
 )
 }
 \description{
