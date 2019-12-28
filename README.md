@@ -1,5 +1,7 @@
 # BayesianStatisticsProject
 
-To install the package which I called MYpackage, you need to install first the devtools package (and don't forget to run library(devtools));
-maybe also you might need (not sure, also I'm not using Rstudio right now) to download from the web and install the latest version of Rtools.
-At this point if you setwd("...") in the directory that contains the MYpackage folder, you just need to run install("MYpackage"). 
+The following specifications are needed to run the project code:
+1. Install the latest R Tools version (3.6.2). If that version is not installed, it is probable that the code will not work.
+2. Intall devtools package, and run `library(devtools)`.
+3. Introduce and run the line of code `setwd("(DIRECTORY)")` where `DIRECTORY` stands for the directory address that contains MYpackage folder.
+4. Install the customized package 'MYpackage' by introducing and running the line of code `install("MYpackage").
