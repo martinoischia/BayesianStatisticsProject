@@ -121,9 +121,6 @@ VI.loss.draws= function (PYclust, parti=PYclust, print.bar = TRUE) {
 if(print.bar) {pb <- txtProgressBar(0, nrow(parti), style = 3)}
 VI <- vector(length = nrow(parti))
 n = ncol(PYclust)
-	# sim.mat = array(dim = c(nrow(PYclust),n,n))
-	# for(i in 1:nrow(PYclust)){sim.mat[i,,]=sapply(PYclust[i,], function(x) x == PYclust[i,])}
-
 # the similarity matrix for any partition visited is put in a big matrix
 sim.mat = matrix(ncol = nrow(PYclust)*n, nrow= n)
 matrice = matrix(ncol = nrow(PYclust)*n, nrow= n)

@@ -18,7 +18,7 @@ data_toy <- c(rnorm(15, 0, 100))
 ##### MCMC sampling for a DP mixture model.
 
 model <- PYdensity(data_toy, 
-                   mcmc = list(niter = 15000, nburn = 5000, 
+                   mcmc = list(niter = 25000, nburn = 15000, 
                                method = "SLI", model = "LS", hyper = F)) 
 
 summary(model)
@@ -33,8 +33,7 @@ data.frame(x = seq(min(model$grideval), max(model$grideval), by = 0.01),
   geom_line(aes(x = x, y = y,col = "True density")) + 
   geom_line(data = data.frame(xx=model$grideval,yy=colMeans(model$density)), aes(x=xx, y=yy, col="Estimated density"))+
   scale_color_manual(name = "Group",
-                     values = c( "True density" = "blue", "Estimated density" = "red"),
-                     labels = c("True density", "Estimated density"))+
+                     values = c( "True density" = "blue", "Estimated density" = "red"))+
   geom_point(data.frame(x = data_toy), 
              mapping =  aes(x = x, y = 0) )
 

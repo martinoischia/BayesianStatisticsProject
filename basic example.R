@@ -37,8 +37,7 @@ theme_minimal() +
 geom_line(aes(x = x, y = y,col = "True density")) + 
 geom_line(data = data.frame(xx=model$grideval,yy=colMeans(model$density)), aes(x=xx, y=yy, col="Estimated density"))+
 scale_color_manual(name = "Group",
-values = c( "True density" = "blue", "Estimated density" = "red"),
-labels = c("True density", "Estimated density"))+
+values = c( "True density" = "blue", "Estimated density" = "red"))+
 geom_point(data.frame(x = data_toy), 
            mapping =  aes(x = x, y = 0) )
 
