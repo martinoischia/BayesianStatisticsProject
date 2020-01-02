@@ -62,7 +62,8 @@ effectiveSize(coda_model)
 
 Binder = B.loss.draws(model$clust)
 Binder$min
-# Binder$exp.loss	
+Binder$exp.loss
+
 # Partitions found by exploiting different hierarchical clusterings
 Hier(model)$average.Binder   
 Hier(model)$complete.Binder
