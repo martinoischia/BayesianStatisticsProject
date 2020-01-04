@@ -29,9 +29,10 @@ ENOC(1, length(data_toy))
 
 ## Plot of the estimated density and its bayesian credible intervals
 
-data.frame(x = seq(-5, 5, by = 0.1), 
-           y = 0.33 * dnorm(seq(-5, 5, by = 0.1), -2, 1) + 
-               0.67 * dnorm(seq(-5, 5, by = 0.1), 2, 1)) %>%
+data.frame(x = seq(min(model$grideval), max(model$grideval), by = 0.1),
+            y = 0.33 * dnorm(seq(min(model$grideval), max(model$grideval), by = 0.1), -2, 1) +
+                0.67 * dnorm(seq(min(model$grideval), max(model$grideval), by = 0.1), 2, 1)) %>%
+
 ggplot()+
 theme_minimal() + 
 geom_line(aes(x = x, y = y,col = "True density")) + 
@@ -65,7 +66,7 @@ Hier(model)$complete.eu
 
 ## Partition in the Markov chain minimizing the Variation of Information Loss
 
-#VI = VI.loss.draws(model$clust)
+VI = VI.loss.draws(model$clust)
 VI.ineq = VI.ineq.draws(model$clust)
 VI$min
 VI.ineq$min
