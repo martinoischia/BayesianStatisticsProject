@@ -83,19 +83,15 @@ data.ea <- hclust(as.dist(PDM), method='average')
 data.ec <- hclust(as.dist(PDM), method='complete')
 part.ea = t(cutree(data.ea, k = 1:n))
 part.ec = t(cutree(data.ec, k = 1:n))
-d_absa <- c()
-for(i in 1:nrow(part.ea)){
-  d_absa[i] <- sum(abs(1 * (sapply(part.ea[i,], 
-                              function(x) x == part.ea[i,])) - PSM)) 
-}
-min.a = part.ea[which.min(d_absa),]
 
-d_absc = c()
-for(i in 1:nrow(part.ec)){
-  d_absc[i] <- sum(abs(1 * (sapply(part.ec[i,], 
-                              function(x) x == part.ec[i,])) - PSM)) 
-}
-min.c = part.ec[which.min(d_absc),]
+VI.a=VI.loss.draws(PYdens$clust, parti=part.ea, print.bar = FALSE)$min
+B.a=B.loss.draws(PYdens$clust, parti=part.ea)$min
+VI.ineq.a=VI.ineq.draws(PYdens$clust, parti=part.ea, print.bar = FALSE)$min
+VI.c=VI.loss.draws(PYdens$clust, parti=part.ec, print.bar = FALSE)$min
+B.c=B.loss.draws(PYdens$clust, parti=part.ec)$min
+VI.ineq.c=VI.ineq.draws(PYdens$clust, parti=part.ec, print.bar = FALSE)$min
+
+
 # Partition estimate based on hierarchical clustering
 # for the PDM and for euclidean distance 
 
@@ -110,7 +106,11 @@ index.ea = which.max(data.ea$height[-1]-data.ea$height[-(n-1)])
 index.ec = which.max(data.ea$height[-1]-data.ea$height[-(n-1)])
 clust.ea2=cutree(data.ea, k = n-index.ea +1)
 clust.ec2=cutree(data.ec, k = n-index.ec +1)
-return(list(average.Binder = min.a, BI.average = d_absa, complete.Binder = min.c , BI.complete = d_absc, average.PSM=clust.ea,complete.PSM = clust.ec,average.eu = clust.ea2,complete.eu = clust.ec2))
+return(list(average.Binder = B.a, complete.Binder = B.c,
+			average.VI = VI.a, complete.VI = VI.c,
+			average.VI.ineq = VI.ineq.a, complete.VI.ineq= VI.ineq.c,
+			average.PSM=clust.ea,complete.PSM = clust.ec,
+			average.eu = clust.ea2,complete.eu = clust.ec2))
 }
 
 #' VI loss

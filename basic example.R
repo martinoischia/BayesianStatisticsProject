@@ -57,12 +57,17 @@ Binder = B.loss.draws(model$clust)
 Binder$min
 # Binder$exp.loss	
 # Partitions found by eploiting different hierarchical clusterings
-Hier(model)$average.Binder   
-Hier(model)$complete.Binder
-Hier(model)$average.PSM
-Hier(model)$complete.PSM
-Hier(model)$average.eu
-Hier(model)$complete.eu
+hier=Hier(model)
+hier$average.Binder   
+hier$complete.Binder
+hier$average.VI
+hier$complete.VI
+hier$average.VI.ineq
+hier$complete.VI.ineq
+hier$average.PSM
+hier$complete.PSM
+hier$average.eu
+hier$complete.eu
 
 ## Partition in the Markov chain minimizing the Variation of Information Loss
 
