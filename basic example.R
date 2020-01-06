@@ -1,4 +1,5 @@
 library(coda)
+
 library(BNPmix)
 library(ggplot2)
 library(tidyr)
