@@ -16,11 +16,14 @@ require(ggpubr)
 n = 10
 
 # We will use the following rates
-rates = list(10, 2, 1, 0.5, 0.25)
+rate_used = 1
 
-for (i in rates){
+# The distribution will be translated by the following values
+translations = list(-5, -2, 0, 2, 5)
+
+for (i in translations){
   set.seed(42)
-  data_toy <- c(rexp(n, rate=i))
+  data_toy <- c(rexp(n, rate=rate_used)) + rep(i, n)
   
   ##### MCMC sampling for a DP mixture model.
   
@@ -34,7 +37,7 @@ for (i in rates){
   ## Plot of the estimated density and its bayesian credible intervals
   
   data.frame(x = seq(min(model$grideval), max(model$grideval), by = 0.01), 
-             y = dexp(seq(min(model$grideval), max(model$grideval), by = 0.01), rate=i)) %>%
+             y = dexp(seq(min(model$grideval), max(model$grideval), by = 0.01), rate=rate_used)) %>%
     ggplot()+
     theme_minimal() + 
     geom_line(aes(x = x, y = y,col = "True density")) + 
@@ -54,8 +57,8 @@ for (i in rates){
   
   
   ## Partition in the Markov chain minimizing the Binder Loss
-  print("CASE VARIANCE:")
-  print(str(1/i^2))
+  print("CASE TRANSLATION:")
+  print(str(i))
   
   Binder = B.loss.draws(model$clust)
   print("Binder´s Min.: ")
@@ -99,13 +102,14 @@ for (i in rates){
   print("Complete EU:")
   print(hier$complete.eu)
   
-  print("Partitions counter:")
+  print("Partitions Counter:")
   print(partitions.counter(model$clust)[1:5,])
   
   print("Greedy VI:")
-  print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI"))
+  print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI")) 
   print("Greedy VI Ineq:")
   print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI",Jensen=FALSE))
   print("Greedy Binder:")
   print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 20,distance="Binder"))
 }
+

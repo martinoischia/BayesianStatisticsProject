@@ -10,17 +10,18 @@ require(gplots)
 require(ggpubr)
 
 
-##### SIMULATION OF DATA TOY OF 1 EXPONENTIAL WITH DIFFERENT VARIANCES.
+##### SIMULATION OF DATA TOY OF 1 GAUSSIAN WITH DIFFERENT CENTRES.
 
 # Number of points
 n = 10
+# Standard Deviation
+sd = 1
+# We will use the following centres
+centres = list(-5, -2, 0, 2, 5)
 
-# We will use the following rates
-rates = list(10, 2, 1, 0.5, 0.25)
-
-for (i in rates){
+for (i in centres){
   set.seed(42)
-  data_toy <- c(rexp(n, rate=i))
+  data_toy <- c(rnorm(n, i, sd))
   
   ##### MCMC sampling for a DP mixture model.
   
@@ -34,7 +35,7 @@ for (i in rates){
   ## Plot of the estimated density and its bayesian credible intervals
   
   data.frame(x = seq(min(model$grideval), max(model$grideval), by = 0.01), 
-             y = dexp(seq(min(model$grideval), max(model$grideval), by = 0.01), rate=i)) %>%
+             y = dnorm(seq(min(model$grideval), max(model$grideval), by = 0.01), 0, 50)) %>%
     ggplot()+
     theme_minimal() + 
     geom_line(aes(x = x, y = y,col = "True density")) + 
@@ -54,8 +55,8 @@ for (i in rates){
   
   
   ## Partition in the Markov chain minimizing the Binder Loss
-  print("CASE VARIANCE:")
-  print(str(1/i^2))
+  print("CASE CENTRE:")
+  print(str(i))
   
   Binder = B.loss.draws(model$clust)
   print("Binder´s Min.: ")

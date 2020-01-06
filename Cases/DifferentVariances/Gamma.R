@@ -100,11 +100,14 @@ for (i in rates){
   print("Complete EU:")
   print(hier$complete.eu)
   
+  print("Partitions counter:")
   print(partitions.counter(model$clust)[1:5,])
   
-  
-  greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI") 
-  greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI",Jensen=FALSE) 
-  greedy (model$clust,l=	100*ncol(model$clust), maxiter= 20,distance="Binder")
+  print("Greedy VI:")
+  print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI"))
+  print("Greedy VI Ineq:")
+  print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI",Jensen=FALSE))
+  print("Greedy Binder:")
+  print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 20,distance="Binder"))
 }
 

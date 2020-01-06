@@ -10,17 +10,21 @@ require(gplots)
 require(ggpubr)
 
 
-##### SIMULATION OF DATA TOY OF 1 EXPONENTIAL WITH DIFFERENT VARIANCES.
+##### SIMULATION OF DATA TOY OF 1 GAMMA WITH DIFFERENT VARIANCES.
 
 # Number of points
 n = 10
+# Alpha parameter of the distribution
+alpha = 10
+# We will use the following rate
+rate_used = sqrt(2)
+# The distribution will be translated by the following values
+translations = list(0, 0.5, 1, 2, 5)
 
-# We will use the following rates
-rates = list(10, 2, 1, 0.5, 0.25)
-
-for (i in rates){
+for (i in translations){
   set.seed(42)
-  data_toy <- c(rexp(n, rate=i))
+  
+  data_toy <- c(rgamma(n, alpha, rate=rate_used)) + rep(i, n)
   
   ##### MCMC sampling for a DP mixture model.
   
@@ -34,7 +38,7 @@ for (i in rates){
   ## Plot of the estimated density and its bayesian credible intervals
   
   data.frame(x = seq(min(model$grideval), max(model$grideval), by = 0.01), 
-             y = dexp(seq(min(model$grideval), max(model$grideval), by = 0.01), rate=i)) %>%
+             y = dgamma(seq(min(model$grideval), max(model$grideval), by = 0.01), alpha, rate=rate_used)) %>%
     ggplot()+
     theme_minimal() + 
     geom_line(aes(x = x, y = y,col = "True density")) + 
@@ -54,8 +58,8 @@ for (i in rates){
   
   
   ## Partition in the Markov chain minimizing the Binder Loss
-  print("CASE VARIANCE:")
-  print(str(1/i^2))
+  print("CASE TRANSLATION:")
+  print(i)
   
   Binder = B.loss.draws(model$clust)
   print("Binder´s Min.: ")
@@ -109,3 +113,4 @@ for (i in rates){
   print("Greedy Binder:")
   print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 20,distance="Binder"))
 }
+
