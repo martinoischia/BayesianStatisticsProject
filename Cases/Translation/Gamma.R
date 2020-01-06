@@ -19,7 +19,7 @@ alpha = 10
 # We will use the following rate
 rate_used = sqrt(10)
 # The distribution will be translated by the following values
-translations = list(0, 0.5, 1, 2, 5)
+translations = list(-5, -2, 0, 2, 5)
 
 for (i in translations){
   set.seed(42)
