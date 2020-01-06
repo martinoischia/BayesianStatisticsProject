@@ -1,0 +1,109 @@
+library(coda)
+library(BNPmix)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(purrr)
+library(ggsci)
+library(MYpackage)
+require(gplots)
+require(ggpubr)
+
+
+##### SIMULATION OF DATA TOY OF 1 GAUSSIAN WITH DIFFERENT VARIANCES.
+
+# Number of points
+n = 10
+# Centre of the distribution
+centre = 0
+# We will use the following sd
+sds = list(0.1, 0.5, 1, 2, 4)
+
+for (i in sds){
+  set.seed(42)
+  data_toy <- c(rnorm(n, centre, i))
+
+  ##### MCMC sampling for a DP mixture model.
+
+  model <- PYdensity(data_toy, 
+                   mcmc = list(niter = 25000, nburn = 15000, 
+                               method = "SLI", model = "LS", hyper = F)) 
+
+  summary(model)
+  ENOC(1, length(data_toy))
+
+  ## Plot of the estimated density and its bayesian credible intervals
+
+  data.frame(x = seq(min(model$grideval), max(model$grideval), by = 0.01), 
+             y = dnorm(seq(min(model$grideval), max(model$grideval), by = 0.01), 0, 50)) %>%
+    ggplot()+
+    theme_minimal() + 
+    geom_line(aes(x = x, y = y,col = "True density")) + 
+    geom_line(data = data.frame(xx=model$grideval,yy=colMeans(model$density)), aes(x=xx, y=yy, col="Estimated density"))+
+    scale_color_manual(name = "Group",
+                       values = c( "True density" = "blue", "Estimated density" = "red"))+
+    geom_point(data.frame(x = data_toy), 
+               mapping =  aes(x = x, y = 0) )
+
+  ## Coda diagnostic ( raw )
+
+  coda_model <- BNPdens2coda(model)
+  summary(coda_model)
+  x11()
+  plot(coda_model)
+  effectiveSize(coda_model)
+
+
+  ## Partition in the Markov chain minimizing the Binder Loss
+  print("CASE VARIANCE:")
+  print(str(i^2))
+
+  Binder = B.loss.draws(model$clust)
+  print("Binder´s Min.: ")
+  print(Binder$min)
+
+  VI = VI.loss.draws(model$clust)
+  VI.ineq = VI.ineq.draws(model$clust)
+  print("VI Min.:")
+  print(VI$min)
+  print("VI Ineq Min.:")
+  print(VI.ineq$min)
+
+  # Binder$exp.loss	
+  # VI$exp.loss
+  # VI.ineq$VI
+  # Partitions found by exploiting different hierarchical clusterings
+  hier=Hier(model)
+
+  print("Average Binder:")
+  print(hier$average.Binder)
+  print("Complete Binder:")
+  print(hier$complete.Binder)
+
+  print("Average VI:")
+  print(hier$average.VI)
+  print("Complete VI")
+  print(hier$complete.VI)
+
+  print("Average VI Ineq:")
+  print(hier$average.VI.ineq)
+  print("Complete VI Ineq:")
+  print(hier$complete.VI.ineq)
+
+  print("Average PSM:")
+  print(hier$average.PSM)
+  print("Complete PSM:")
+  hier$complete.PSM
+
+  print("Average EU:")
+  print(hier$average.eu)
+  print("Complete EU:")
+  print(hier$complete.eu)
+
+  print(partitions.counter(model$clust)[1:5,])
+
+
+  greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI") 
+  greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI",Jensen=FALSE) 
+  greedy (model$clust,l=	100*ncol(model$clust), maxiter= 20,distance="Binder")
+}
