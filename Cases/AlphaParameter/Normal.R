@@ -16,18 +16,21 @@ require(ggpubr)
 n = 10
 # Standard Deviation
 sd = 1
-# We will use the following centres
-centres = list(-5, -2, 0, 2, 5)
+# Centre
+centre = 0
+# Alphas to test
+alphas = list(0.01, 0.5, 1, 10, 20)
 
-for (i in centres){
+for (i in alphas){
   set.seed(42)
-  data_toy <- c(rnorm(n, i, sd))
+  data_toy <- c(rnorm(n, centre, sd))
   
   ##### MCMC sampling for a DP mixture model.
   
   model <- PYdensity(data_toy, 
                      mcmc = list(niter = 25000, nburn = 15000, 
-                                 method = "SLI", model = "LS", hyper = F)) 
+                                 method = "SLI", model = "LS", hyper = F),
+                     prior=list(strength=i)) 
   
   summary(model)
   ENOC(1, length(data_toy))
@@ -35,7 +38,7 @@ for (i in centres){
   ## Plot of the estimated density and its bayesian credible intervals
   
   data.frame(x = seq(min(model$grideval), max(model$grideval), by = 0.01), 
-             y = dnorm(seq(min(model$grideval), max(model$grideval), by = 0.01), i, sd)) %>%
+             y = dnorm(seq(min(model$grideval), max(model$grideval), by = 0.01), centre, sd)) %>%
     ggplot()+
     theme_minimal() + 
     geom_line(aes(x = x, y = y,col = "True density")) + 
@@ -55,7 +58,7 @@ for (i in centres){
   
   
   ## Partition in the Markov chain minimizing the Binder Loss
-  print("CASE CENTRE:")
+  print("CASE ALPHA:")
   print(str(i))
   
   Binder = B.loss.draws(model$clust)

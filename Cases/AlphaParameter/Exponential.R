@@ -10,24 +10,25 @@ require(gplots)
 require(ggpubr)
 
 
-##### SIMULATION OF DATA TOY OF 1 GAUSSIAN WITH DIFFERENT CENTRES.
+##### SIMULATION OF DATA TOY OF 1 EXPONENTIAL WITH DIFFERENT VARIANCES.
 
 # Number of points
 n = 10
-# Standard Deviation
-sd = 1
-# We will use the following centres
-centres = list(-5, -2, 0, 2, 5)
+# Rate
+rate_used = 1
+# Alphas to test
+alphas = list(0.01, 0.5, 1, 10, 20)
 
-for (i in centres){
+for (i in alphas){
   set.seed(42)
-  data_toy <- c(rnorm(n, i, sd))
+  data_toy <- c(rexp(n, rate=rate_used))
   
   ##### MCMC sampling for a DP mixture model.
   
   model <- PYdensity(data_toy, 
                      mcmc = list(niter = 25000, nburn = 15000, 
-                                 method = "SLI", model = "LS", hyper = F)) 
+                                 method = "SLI", model = "LS", hyper = F),
+                     prior=list(strength=i))
   
   summary(model)
   ENOC(1, length(data_toy))
@@ -35,7 +36,7 @@ for (i in centres){
   ## Plot of the estimated density and its bayesian credible intervals
   
   data.frame(x = seq(min(model$grideval), max(model$grideval), by = 0.01), 
-             y = dnorm(seq(min(model$grideval), max(model$grideval), by = 0.01), i, sd)) %>%
+             y = dexp(seq(min(model$grideval), max(model$grideval), by = 0.01), rate=rate_used)) %>%
     ggplot()+
     theme_minimal() + 
     geom_line(aes(x = x, y = y,col = "True density")) + 
@@ -55,7 +56,7 @@ for (i in centres){
   
   
   ## Partition in the Markov chain minimizing the Binder Loss
-  print("CASE CENTRE:")
+  print("CASE ALPHA:")
   print(str(i))
   
   Binder = B.loss.draws(model$clust)
@@ -100,13 +101,14 @@ for (i in centres){
   print("Complete EU:")
   print(hier$complete.eu)
   
-  print("Partitions counter:")
+  print("Partitions Counter:")
   print(partitions.counter(model$clust)[1:5,])
   
   print("Greedy VI:")
-  print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI"))
+  print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI")) 
   print("Greedy VI Ineq:")
   print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 10 ,distance="VI",Jensen=FALSE))
   print("Greedy Binder:")
   print(greedy (model$clust,l=	100*ncol(model$clust), maxiter= 20,distance="Binder"))
 }
+

@@ -17,7 +17,7 @@ n = 10
 # Alpha parameter of the distribution
 alpha = 10
 # We will use the following rate
-rate_used = sqrt(2)
+rate_used = sqrt(10)
 # The distribution will be translated by the following values
 translations = list(0, 0.5, 1, 2, 5)
 
