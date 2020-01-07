@@ -17,7 +17,8 @@ n = 10
 # Rate
 rate_used = 1
 # Alphas to test
-alphas = list(0.01, 0.5, 1, 10, 20)
+alphas = list(0.01, 0.5, 1, 3, 5)
+alphas = list(3, 5)
 
 for (i in alphas){
   set.seed(42)
