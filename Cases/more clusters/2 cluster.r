@@ -81,3 +81,4 @@ print("RAND hier average VI")
 print(RAND(truepart,Hier3[,]))
 print("RAND hier complete VI")
 print(RAND(truepart,Hier4[,]))
+
