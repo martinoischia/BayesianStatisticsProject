@@ -10,9 +10,9 @@ library(MYpackage)
 require(gplots)
 require(ggpubr)
 ## VI method
-VImethod = greedy 
+VImethod = #greedy 
 			#VI.loss.draws 
-			#VI.ineq.draws 
+			VI.ineq.draws 
 
 ## RAND index
 
@@ -82,8 +82,8 @@ Hier3[it,,mod] =hier$average.VI
 Hier4[it,,mod] =hier$complete.VI
 
 VI = VImethod(model$clust)
-VImin[it,,mod]=#VI$min 
-				VI$cluster
+VImin[it,,mod]=VI$min 
+				#VI$cluster
 
 }
 print (paste("iteration number ",it))
@@ -99,15 +99,15 @@ cat("\n")
 print(paste("Model", model))
 cat("\n")
 print("RAND binder")
-print(RAND(truepart1,Bindermin[,,model])) 
+print(RAND(truepart[model,],Bindermin[,,model])) 
 print("RAND VI")
-print(RAND(truepart1,VImin[,,model]))
+print(RAND(truepart[model,],VImin[,,model]))
 print("RAND hier av Binder")
-print(RAND(truepart1,Hier1[,,model]))
+print(RAND(truepart[model,],Hier1[,,model]))
 print("RAND hier co Binder")
-print(RAND(truepart1,Hier2[,,model]))
+print(RAND(truepart[model,],Hier2[,,model]))
 print("RAND hier av VI")
-print(RAND(truepart1,Hier3[,,model]))
+print(RAND(truepart[model,],Hier3[,,model]))
 print("RAND hier co VI")
-print(RAND(truepart1,Hier4[,,model]))
+print(RAND(truepart[model,],Hier4[,,model]))
 }

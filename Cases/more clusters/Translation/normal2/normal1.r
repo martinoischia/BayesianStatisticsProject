@@ -29,16 +29,15 @@ RAND = function(partition1, partition2){
 
 ## Number of repetitions for each case 
 set.seed(42)
-iterate= 20
+iterate= 8
 n= 15 # Sample Size.
 
 ## Means to test
 
-means = list(c(-5, -5), c(-3, 3), c(-1, -1), c(1, 1), c(3, 3), c(5, 5))
-
-for (i in means){
+means = list(c(-5, -5), c(-3, -3), c(-1, -1), c(1, 1), c(3, 3), c(5, 5))
+i=1
 print('Mean: ')
-print(i)
+print(means[[i]])
 
 ## Structure for keeping the results:
 
@@ -51,7 +50,7 @@ Hier4 =		matrix(0, nrow=iterate, ncol = n)
 
 for(it in 1:iterate){
   print (paste("Iteration Number ",it))
-  data_toy <- rbind(rmvnorm(5, i), rmvnorm(10, c(0, 0)))
+  data_toy <- rbind(rmvnorm(5, means[[i]]), rmvnorm(10, c(0, 0)))
               # rbind(rmvnorm(3, i), rmvnorm(4, c(-2, 2)), rmvnorm(4, c(0, 0)), rmvnorm(4, c(2, -2)))
               # rbind(rmvnorm(1, i), rmvnorm(2, c(0, 3)), rmvnorm(2, c(0, 0)), rmvnorm(2, c(0, -3),
               # rmvnorm(2, c(-3, 0)), rmvnorm(2, c(3, 0)),rmvnorm(2, c(-3, 3)),rmvnorm(2, c(3, -3)))
@@ -93,6 +92,4 @@ print("RAND hier average VI")
 print(RAND(truepart,Hier3[,]))
 print("RAND hier complete VI")
 print(RAND(truepart,Hier4[,]))
-
-}
 
