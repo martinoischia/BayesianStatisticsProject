@@ -116,3 +116,5 @@ x11(); plot(data1[[j]],col=truepart+1, pch=16)
 # x11();plot(data1[[j]], col=Bindermin[j,]+1, pch=16  )
 # x11();plot(data1[[j]], col =VImin[j,]+1,pch=16)
 }
+
+# Results
