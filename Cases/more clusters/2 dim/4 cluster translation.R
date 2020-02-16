@@ -11,11 +11,11 @@ require(ggpubr)
 
 dimension = 2
 
-parameter = c(1, 1) # 45 degrees
+parameter = c(1, 1)/sqrt(2) # 45 degrees
 # parameter = c(1, 0) # 0 degrees
 
 # scalar = 1
-scalar = 1
+scalar = 10
 
 RAND = function(partition1, partition2){
   lung = nrow(partition2)
@@ -40,7 +40,7 @@ means = rbind(
   c(-distance/2,-distance/2),
   c(-distance/2,distance/2))
 variance = var(means)[1,1]
-
+means = means + distance*scalar*parameter
 
 
 ##### SIMULATION OF DATA TOY OF 2 MULTIVARIATE NORMAL, ONE OF THEM CENTERED IN THE ORIGIN, 
@@ -72,7 +72,7 @@ for(it in 1:iterate){
   ##### MCMC sampling for a DP mixture model
   model <- PYdensity(data_toy, 
                      mcmc = list(niter = 15000, nburn = 5000, 
-                                 method = "ICS", model = "LS", hyper = F,prior=list(strength=1.25, m0=distance*scalar*parameter, k0=1/variance))) 
+                                 method = "ICS", model = "LS", hyper = F,prior=list(strength=1.25, k0=1/variance))) 
   
   
   Binder = B.loss.draws(model$clust)
@@ -118,11 +118,35 @@ for (j in iterate:iterate) {
 
 
 # Results:
-# parameter=(1,1):
-#   scalar=1
-#     RAND Binder: 0.938009
-#     RAND VI: 0.9311086
-#     RAND Hier Average Binder: 0.938009
-#     RAND Hier Complete Binder: 0.9384615
-#     RAND Hier Average VI: 0.9379713
-#     RAND Hier Complete VI: 0.9393665
+# parameter=(1,1)/sqrt(2):
+#   scalar=sqrt(2)
+# to be done again
+
+
+# parameter=(1,1)/sqrt(2)
+
+# scalar = 10
+ # print("RAND binder")
+# [1] "RAND binder"
+# > print(RAND(truepart,Bindermin[,])) 
+# [1] 0.2352941
+# > print("RAND VI")
+# [1] "RAND VI"
+# > print(RAND(truepart,VImin[,]))
+# [1] 0.2352941
+# > print("RAND hier average Binder")
+# [1] "RAND hier average Binder"
+# > print(RAND(truepart,Hier1[,]))
+# [1] 0.2352941
+# > print("RAND hier complete Binder")
+# [1] "RAND hier complete Binder"
+# > print(RAND(truepart,Hier2[,]))
+# [1] 0.2352941
+# > print("RAND hier average VI")
+# [1] "RAND hier average VI"
+# > print(RAND(truepart,Hier3[,]))
+# [1] 0.2352941
+# > print("RAND hier complete VI")
+# [1] "RAND hier complete VI"
+# > print(RAND(truepart,Hier4[,]))
+# [1] 0.2352941
