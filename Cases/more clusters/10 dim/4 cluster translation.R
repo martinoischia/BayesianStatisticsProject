@@ -11,11 +11,15 @@ require(ggpubr)
 
 dimension = 2
 
-parameter = c(rep(1, 10))/(sqrt(10) * 5.5) # 45 degrees
+parameter = c(rep(1, 10))/(sqrt(10)) # 45 degrees
 # parameter = c(1, 0) # 0 degrees
 
-# scalar = 0
-scalar = 1/4
+scalar = 0
+# scalar = 1/4
+# scalar = 1/2
+# scalar = 1
+# scalar = 2
+# scalar = 4
 
 RAND = function(partition1, partition2){
   lung = nrow(partition2)
@@ -32,7 +36,8 @@ RAND = function(partition1, partition2){
 }
 
 # distance = 6
-distance = 5.5
+# distance = 5.5
+# distance = 2
 
 means = rbind(
   c(rep(distance/2, 10)),
@@ -44,7 +49,7 @@ variance = var(means)[1,1]
 
 ## Number of repetitions for each case 
 set.seed(42)
-iterate= 20
+iterate= 1
 n= 52 # must be divisible by 4!!!
 
 
@@ -91,6 +96,8 @@ truepart2 = c(rep(0,n/4), rep(1,n/4),rep(2,n/4),rep(3,n/4))
 truepart3 = c(rep(0,1), rep(1,2),rep(2,2),rep(3,2),rep(4,2),rep(5,2),rep(6,2),rep(7,2))
 truepart  = truepart2
 
+print("SCALAR")
+print(scalar)
 print("RAND binder")
 print(RAND(truepart,Bindermin[,])) 
 print("RAND VI")
@@ -107,11 +114,113 @@ print(RAND(truepart,Hier4[,]))
 plot(model, show_points = T, show_hist = T, show_clust = T)
 
 for (j in iterate:iterate) {
-  x11(); plot(data1[[j]],col=truepart+1, pch=16)
-  # x11();plot(data1[[j]], col=Bindermin[j,]+1, pch=16  )
+  # x11(); plot(data1[[j]],col=truepart+1, pch=16)
+  x11();plot(data1[[j]], col=Bindermin[j,]+1, pch=16  )
   # x11();plot(data1[[j]], col =VImin[j,]+1,pch=16)
 }
 
 # Results
-# parameter= (10, 10)/sqrt(10)
+# parameter= (10, 10)/(sqrt(10) * 5.5)
 # scalar = 0
+# > print("RAND binder")
+# [1] "RAND binder"
+# > print(RAND(truepart,Bindermin[,])) 
+# [1] 0.2352941
+# > print("RAND VI")
+# [1] "RAND VI"
+# > print(RAND(truepart,VImin[,]))
+# [1] 0.2352941
+# > print("RAND hier average Binder")
+# [1] "RAND hier average Binder"
+# > print(RAND(truepart,Hier1[,]))
+# [1] 0.2352941
+# > print("RAND hier complete Binder")
+# [1] "RAND hier complete Binder"
+# > print(RAND(truepart,Hier2[,]))
+# [1] 0.2352941
+# > print("RAND hier average VI")
+# [1] "RAND hier average VI"
+# > print(RAND(truepart,Hier3[,]))
+# [1] 0.2352941
+# > print("RAND hier complete VI")
+# [1] "RAND hier complete VI"
+# > print(RAND(truepart,Hier4[,]))
+# [1] 0.2352941
+
+# scalar= 1/4
+# > print("RAND binder")
+# [1] "RAND binder"
+# > print(RAND(truepart,Bindermin[,])) 
+# [1] 0.2373303
+# > print("RAND VI")
+# [1] "RAND VI"
+# > print(RAND(truepart,VImin[,]))
+# [1] 0.2363122
+# > print("RAND hier average Binder")
+# [1] "RAND hier average Binder"
+# > print(RAND(truepart,Hier1[,]))
+# [1] 0.2373303
+# > print("RAND hier complete Binder")
+# [1] "RAND hier complete Binder"
+# > print(RAND(truepart,Hier2[,]))
+# [1] 0.2373303
+# > print("RAND hier average VI")
+# [1] "RAND hier average VI"
+# > print(RAND(truepart,Hier3[,]))
+# [1] 0.2373303
+# > print("RAND hier complete VI")
+# [1] "RAND hier complete VI"
+# > print(RAND(truepart,Hier4[,]))
+# [1] 0.2373303
+
+# scalar = 1/2
+# > print("RAND binder")
+# [1] "RAND binder"
+# > print(RAND(truepart,Bindermin[,])) 
+# [1] 0.2373303
+# > print("RAND VI")
+# [1] "RAND VI"
+# > print(RAND(truepart,VImin[,]))
+# [1] 0.2363122
+# > print("RAND hier average Binder")
+# [1] "RAND hier average Binder"
+# > print(RAND(truepart,Hier1[,]))
+# [1] 0.2373303
+# > print("RAND hier complete Binder")
+# [1] "RAND hier complete Binder"
+# > print(RAND(truepart,Hier2[,]))
+# [1] 0.2373303
+# > print("RAND hier average VI")
+# [1] "RAND hier average VI"
+# > print(RAND(truepart,Hier3[,]))
+# [1] 0.2373303
+# > print("RAND hier complete VI")
+# [1] "RAND hier complete VI"
+# > print(RAND(truepart,Hier4[,]))
+# [1] 0.2373303
+
+# scalar = 1
+# > print("RAND binder")
+# [1] "RAND binder"
+# > print(RAND(truepart,Bindermin[,])) 
+# [1] 0.2456637
+# > print("RAND VI")
+# [1] "RAND VI"
+# > print(RAND(truepart,VImin[,]))
+# [1] 0.2385747
+# > print("RAND hier average Binder")
+# [1] "RAND hier average Binder"
+# > print(RAND(truepart,Hier1[,]))
+# [1] 0.2470588
+# > print("RAND hier complete Binder")
+# [1] "RAND hier complete Binder"
+# > print(RAND(truepart,Hier2[,]))
+# [1] 0.2470588
+# > print("RAND hier average VI")
+# [1] "RAND hier average VI"
+# > print(RAND(truepart,Hier3[,]))
+# [1] 0.239819
+# > print("RAND hier complete VI")
+# [1] "RAND hier complete VI"
+# > print(RAND(truepart,Hier4[,]))
+# [1] 0.239819
