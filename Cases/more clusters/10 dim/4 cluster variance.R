@@ -11,18 +11,13 @@ require(ggpubr)
 
 dimension = 2
 
-# parameter=2
-# parameter=4
-# parameter=8
-# parameter=1/3
-# parameter=1/9
-parameter=1
+parameter = 1/4
 
 RAND = function(partition1, partition2){
   lung = nrow(partition2)
   vec = vector(length= lung)
   for(i in 1:lung){
-
+    
     mat1=	1 * (sapply(partition1, 
                       function(x) x == partition1))
     mat2= 1 * (sapply(partition2[i,], 
@@ -36,16 +31,12 @@ RAND = function(partition1, partition2){
 distance = 5.5
 
 means = rbind(
-c(distance/2,distance/2),
-c(distance/2,-distance/2),
-c(-distance/2,-distance/2),
-c(-distance/2,distance/2))
+  c(rep(distance/2, 10)),
+  c(rep(distance/2, 5), rep(-distance/2, 5)),
+  c(rep(-distance/2, 10)),
+  c(rep(-distance/2, 5), rep(distance/2, 5)))
 variance = var(means)[1,1]
 
-
-
-##### SIMULATION OF DATA TOY OF 2 MULTIVARIATE NORMAL, ONE OF THEM CENTERED IN THE ORIGIN, 
-##### AND THE OTHER TRANSLATING FROM (-5, -5) TO (5, 5).
 
 ## Number of repetitions for each case 
 set.seed(42)
@@ -66,14 +57,14 @@ Hier4 =		matrix(0, nrow=iterate, ncol = n)
 for(it in 1:iterate){
   print (paste("Iteration Number ",it))
   data_toy <- #rbind(rmvnorm(5, means[[i]]), rmvnorm(10, c(0, 0)))
-              rbind(rmvnorm(n/4,means[1,] ), rmvnorm(n/4, means[2,]), rmvnorm(n/4, means[3,]), rmvnorm(n/4, means[4,]))
-              # rbind(rmvnorm(2, means[[i]]), rmvnorm(2, c(0, 3)), rmvnorm(2, c(0, 0)), rmvnorm(2, c(0, -3),
-              # rmvnorm(2, c(-3, 0)), rmvnorm(2, c(3, 0)),rmvnorm(2, c(-3, 3)),rmvnorm(1, c(3, -3)))
+    rbind(rmvnorm(n/4,means[1,] ), rmvnorm(n/4, means[2,]), rmvnorm(n/4, means[3,]), rmvnorm(n/4, means[4,]))
+  # rbind(rmvnorm(2, means[[i]]), rmvnorm(2, c(0, 3)), rmvnorm(2, c(0, 0)), rmvnorm(2, c(0, -3),
+  # rmvnorm(2, c(-3, 0)), rmvnorm(2, c(3, 0)),rmvnorm(2, c(-3, 3)),rmvnorm(1, c(3, -3)))
   
   ##### MCMC sampling for a DP mixture model
   model <- PYdensity(data_toy, 
                      mcmc = list(niter = 15000, nburn = 5000, 
-                                 method = "ICS", model = "LS", hyper = F,prior=list(strength=1.25, Sigma0 = parameter*diag(dimension), k0=1/variance))) 
+                                 method = "ICS", model = "LS", hyper = F),prior=list(strength=1.25, Sigma0 = parameter*diag(dimension), k0=1/variance))
   
   
   Binder = B.loss.draws(model$clust)
@@ -112,9 +103,11 @@ print(RAND(truepart,Hier4[,]))
 plot(model, show_points = T, show_hist = T, show_clust = T)
 
 for (j in iterate:iterate) {
-x11(); plot(data1[[j]],col=truepart+1, pch=16)
-# x11();plot(data1[[j]], col=Bindermin[j,]+1, pch=16  )
-# x11();plot(data1[[j]], col =VImin[j,]+1,pch=16)
+  x11(); plot(data1[[j]],col=truepart+1, pch=16)
+  # x11();plot(data1[[j]], col=Bindermin[j,]+1, pch=16  )
+  # x11();plot(data1[[j]], col =VImin[j,]+1,pch=16)
 }
 
 # Results
+# parameter= (10, 10)/sqrt(10)
+# scalar = 0

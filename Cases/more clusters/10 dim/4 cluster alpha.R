@@ -11,11 +11,7 @@ require(ggpubr)
 
 dimension = 2
 
-parameter = c(rep(1, 10))/(sqrt(10) * 5.5) # 45 degrees
-# parameter = c(1, 0) # 0 degrees
-
-# scalar = 0
-scalar = 1/4
+parameter = 1/4
 
 RAND = function(partition1, partition2){
   lung = nrow(partition2)
@@ -68,7 +64,7 @@ for(it in 1:iterate){
   ##### MCMC sampling for a DP mixture model
   model <- PYdensity(data_toy, 
                      mcmc = list(niter = 15000, nburn = 5000, 
-                                 method = "ICS", model = "LS", hyper = F),prior=list(strength=1.25, m0=scalar*parameter*distance, k0=1/variance))
+                                 method = "ICS", model = "LS", hyper = F),prior=list(strength=parameter, k0=1/variance))
   
   
   Binder = B.loss.draws(model$clust)
