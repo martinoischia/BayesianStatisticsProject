@@ -8,13 +8,13 @@ library(MYpackage)
 require(gplots)
 require(ggpubr)
 
-# parameter=1/4
+# parameter=1/25
 # parameter=1/2
 # parameter=1
 # parameter=2
 # parameter=4
 # parameter=8
-parameter=16
+parameter=1/60
 
 
 RAND = function(partition1, partition2){
@@ -36,7 +36,7 @@ variance = var(c(-3/2*distance, distance/2, -distance/2,3/2*distance))
 
 ## Number of repetitions for each case 
 set.seed(42)
-iterate= 20
+iterate= 2
 n=20 #sample size
 
 
@@ -110,7 +110,7 @@ print("RAND hier average VI")
 print(RAND(truepart,Hier3))
 print("RAND hier complete VI")
 print(RAND(truepart,Hier4))
-for (j in 1:6) {
+for (j in iterate:iterate) {
 x11(); plot(data1[j,], rep(0,n),ylim=c(0,2),col=truepart+1, pch=16, main= 'low true, middle Binder, above VI')
 points(data1[j,], rep(1,n),col=Bindermin[j,]+1, pch=16  )
 points(data1[j,], rep(2,n), col =VImin[j,]+1,pch=16)
@@ -311,3 +311,56 @@ print(parameter)
 # [1] "RAND hier complete VI"
 # > print(RAND(truepart,Hier4))
 # [1] 0.4797368
+
+1/4
+ 
+[1] "RAND binder"
+> print(RAND(truepart,Bindermin)) 
+[1] 0.9152632
+> print("RAND VI")
+[1] "RAND VI"
+> print(RAND(truepart,VImin))
+[1] 0.9242105
+> print("RAND hier average Binder")
+[1] "RAND hier average Binder"
+> print(RAND(truepart,Hier1))
+[1] 0.9134211
+> print("RAND hier complete Binder")
+[1] "RAND hier complete Binder"
+> print(RAND(truepart,Hier2))
+[1] 0.9152632
+> print("RAND hier average VI")
+[1] "RAND hier average VI"
+> print(RAND(truepart,Hier3))
+[1] 0.9184211
+> print("RAND hier complete VI")
+[1] "RAND hier complete VI"
+> print(RAND(truepart,Hier4))
+[1] 0.9236842
+
+
+1/8
+
+[1] "RAND binder"
+> print(RAND(truepart,Bindermin)) 
+[1] 0.9097368
+> print("RAND VI")
+[1] "RAND VI"
+> print(RAND(truepart,VImin))
+[1] 0.8178947
+> print("RAND hier average Binder")
+[1] "RAND hier average Binder"
+> print(RAND(truepart,Hier1))
+[1] 0.9113158
+> print("RAND hier complete Binder")
+[1] "RAND hier complete Binder"
+> print(RAND(truepart,Hier2))
+[1] 0.9094737
+> print("RAND hier average VI")
+[1] "RAND hier average VI"
+> print(RAND(truepart,Hier3))
+[1] 0.9034211
+> print("RAND hier complete VI")
+[1] "RAND hier complete VI"
+> print(RAND(truepart,Hier4))
+[1] 0.9028947

@@ -14,10 +14,10 @@ dimension = 3
 # distance = 6
 distance = 3
 
-# parameter = 1/16
+parameter = 1/16
 # parameter = 1/8
 # parameter=1/4
-parameter = 1/2
+# parameter = 1/2
 # parameter = 1
 # parameter = 2
 # parameter = 4
@@ -51,7 +51,7 @@ variance = var(means)[1,1]
 
 ## Number of repetitions for each case 
 set.seed(42)
-iterate= 20
+iterate= 1
 n= 52 # must be divisible by 4!!!
 
 
