@@ -1,5 +1,5 @@
 # Partition estimation with model misspecification
-Project for Bayesian statistics course - *Politecnico di Milano*, academic year 2019-2020.
+Project for the course of Bayesian statistics at Politecnico di Milano, academic year 2019-2020.
 
 To run the project code:
 1. If you don't have it already, download from the web and 
